@@ -50,4 +50,5 @@ then
     cd ..
 fi
 # Cleanup
-rm -rf build-*
+rm -rf build-gcc
+rm -rf build-binutils
