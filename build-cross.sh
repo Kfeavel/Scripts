@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # Get target
 read -p "Enter target architecture: " arch
+read -p "Enter install destination: " dest
 # Export compiler parameters
-export PREFIX="$HOME/Applications/Panix"
+export PREFIX=${dest}
 export TARGET=${arch}
 export PATH="$PREFIX/bin:$PATH"
 
-read -p "Update binutils? (y/n) " -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+binutils() {
     # Get binutils
     echo
     read -p "Enter Binutils version: " binver
@@ -25,11 +24,9 @@ then
     make -j$(nproc)
     make install
     cd ..
-fi
-echo
-read -p "Update GCC? (y/n) " -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+}
+
+gcc() {
     # Get GCC
     echo
     read -p "Enter GCC version: " gccver
@@ -48,6 +45,18 @@ then
     make -j$(nproc) install-gcc
     make -j$(nproc) install-target-libgcc
     cd ..
+}
+
+read -p "Update binutils? (y/n) " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    binutils
+fi
+echo
+read -p "Update GCC? (y/n) " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    gcc
 fi
 # Cleanup
 rm -rf build-gcc
